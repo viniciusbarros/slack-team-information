@@ -1,0 +1,32 @@
+h2 {
+    text-align: center;
+    padding: 30px 0;
+    color: #ffffff;
+    background-color: #004261;
+    margin-bottom: 0;
+}
+
+.user .info {
+    background-color: #ceecf5;
+    margin: 5px;
+    padding: 10px;
+    font-size: 1em;
+    overflow: hidden;
+}
+
+.place {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+span.icon {
+    margin-right: 10px;
+    font-size: 1em;
+    color: #004261;
+    position: relative;
+}
+
+ul {
+    list-style: none;
+    margin-left: 0;
+}

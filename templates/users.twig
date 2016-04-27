@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Team Info</title>
+    <link rel="stylesheet" type="text/css" href="vendor/zurb/foundation/dist/foundation.min.css">
+
+    <link rel="stylesheet" type="text/css" href="css/fonts.css">
+    <link rel="stylesheet" type="text/css" href="css/users.css">
+</head>
+
+<body>
+{% for name,place in places %}
+    {% if place.people is not empty %}
+        <h2>{{ name }}</h2>
+        <div class="row place" data-equalizer>
+            {% for person in place.people %}
+                <div class="small-12 medium-6 large-4 columns user {% if loop.last %} end{% endif %} ">
+                    <div class="info" data-equalizer-watch>
+                        <div class="media-object">
+                            <div class="media-object-section">
+                                <div class="thumbnail">
+                                    <img src="{{ person.final_picture }}">
+                                </div>
+                            </div>
+                            <div class="media-object-section">
+                                <h5 class="name">{{ person.profile.real_name_normalized }}</h5>
+                                <ul>
+                                    {#<li>#}
+                                        {#<span class="icon icon-user" title="Username"></span>{{ person.name }}#}
+                                    {#</li>#}
+                                    {% if person.profile.title is not empty %}
+                                        <li>
+                                            <span class="icon icon-tag" title="Title"></span>{{ person.profile.title }}
+                                        </li>
+                                    {% endif %}
+                                    {% if person.profile.email is not empty %}
+                                        <li>
+                                            <span class="icon icon-envelope-o" title="E-mail"></span>
+                                            <a href="mailto:{{ person.profile.email }}">{{ person.profile.email }}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if person.profile.phone is not empty %}
+                                        <li>
+                                        <span class="icon icon-phone"
+                                              title="Phone Number"></span>{{ person.profile.phone }}
+                                        </li>
+                                    {% endif %}
+                                    {% if person.profile.skype is not empty %}
+                                        <li>
+                                    <span class="icon icon-skype"
+                                          title="Skype username"></span>{{ person.profile.skype }}
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endfor %}
+
+<script src="js/jquery-1.12.3.min.js"></script>
+<script src="vendor/zurb/foundation/dist/foundation.min.js"></script>
+<script src="vendor/zurb/foundation/js/foundation.equalizer.js"></script>
+
+<script>
+    $(document).foundation();
+</script>
+</body>
+</html>

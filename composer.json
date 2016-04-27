@@ -1,0 +1,14 @@
+{
+    "name": "simply/team_info",
+    "description": "Gets information about a slack team",
+    "require": {
+        "zurb/foundation": "^6.2",
+        "twig/twig": "^1.24"
+    },
+    "authors": [
+        {
+            "name": "Vinicius Barros",
+            "email": "vmbarross@gmail.com"
+        }
+    ]
+}
