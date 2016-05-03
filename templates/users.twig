@@ -12,9 +12,9 @@
 </head>
 
 <body>
-{% for name,place in places %}
+{% for place in places %}
     {% if place.people is not empty %}
-        <h2>{{ name }}</h2>
+        <h2>{{ place.name }}</h2>
         <div class="row place" data-equalizer>
             {% for person in place.people %}
                 <div class="small-12 medium-6 large-4 columns user {% if loop.last %} end{% endif %} ">

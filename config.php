@@ -6,13 +6,20 @@ define('SLACK_TOKEN', 'xxxx-99999999999-99999999999-99999999999-99999999999');
 define('REQUEST_METHOD','POST'); //can be GET as well
 
 $places = array(
-    'Office' => array(
+    'off' => array(
+        'alias' => array('oof','out of office','outofoffice'),
+        'displayIndex' => 3,
+        'name' => 'Off'
+    ),
+    'office' => array(
         'alias' => array('office'),
+        'displayIndex' => 1,
+        'name' => 'Office'
     ),
-    'Working From Home' => array(
-        'alias' => array('wfh', 'home', 'house'),
+    'wfh' => array(
+        'alias' => array('wfh', 'home'),
+        'displayIndex' => 2,
+        'name' => 'Working From Home'
+
     ),
-    'Off' => array(
-        'alias' => array('off'),
-    )
 );
