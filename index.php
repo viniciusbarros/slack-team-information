@@ -2,88 +2,69 @@
 
 use TeamInfo\SlackRetriever;
 
-include_once 'config.php';
-include_once 'SlackRetriever.php';
+include_once 'classes/SlackRetriever.php';
+include_once 'classes/Place.php';
+include_once 'classes/Person.php';
 include_once 'vendor/autoload.php';
+
+
+$places = array();
+if(file_exists('config/config.php')){
+    require_once 'config/config.php';
+}else{
+    die('You need to create a <strong>config/config.php</strong> file.<br/>You can duplicate config/example.php for a faster start');
+}
+
+
+$placeNotFound = new Place('Where am I?', 5, array(), false);
+$placeLost = new Place('Lost in time? Today is ' . date('l') . '', 6, array(), false);
+
+$places[] = &$placeNotFound;
+$places[] = &$placeLost;
 
 $team = new SlackRetriever(SLACK_TOKEN);
 $info = $team->getUsers();
-$placesIndex = array();
-$placeIndex = sizeof($places) + 1;
 
-
-//Preparing Places
-if (defined('UNKNOWN_LOCATION_GROUP_NAME') && !isset($places['unknown_location'])) {
-    $places['unknown_location'] = array(
-        'alias' => array(),
-        'displayIndex' => $placeIndex++,
-        'name' => UNKNOWN_LOCATION_GROUP_NAME,
-    );
-}
-
-if (CHECK_DAY_OF_WEEK_IN_NAME && !isset($places['lost_in_time'])) {
-    $places['lost_in_time'] = array(
-        'alias' => array(),
-        'displayIndex' => $placeIndex++,
-        'name' => 'Lost in Time (today is ' . date('l') . '!)',
-    );
-}
-
-foreach ($places as $key => $place) {
-    $places[$key]['people'] = array();
-}
-
-//Looking into each member and checking where it is based on its name
 if (isset($info['members'])) {
-    $not_found =
-    $lost_in_time = array();
-    foreach ($info['members'] as $pKey => $person) {
+
+    foreach ($info['members'] as $user_info) {
 
         //Skipping deleted and bot users
-        if ($person['deleted'] || $person['is_bot'] || $person['name'] == 'slackbot') {
+        if ($user_info['deleted'] || $user_info['is_bot'] || $user_info['name'] == 'slackbot') {
             continue;
         }
 
+        $person = new Person($user_info);
         $found = false;
-        $person['final_picture'] = isset($person['profile']['image_' . PROFILE_IMAGE_SIZE]) ? $person['profile']['image_' . PROFILE_IMAGE_SIZE] : 'https://placeholdit.imgix.net/~text?txtsize=17&txt=Profile%20Image&w=' . PROFILE_IMAGE_SIZE . '&h=' . PROFILE_IMAGE_SIZE;
 
-        foreach ($places as $placeKey => $place) {
+        foreach ($places as $place) {
 
-            //Checking if person is in one of the setup places
-            $pattern = "/(" . strtolower(implode('|', $place['alias'])) . ")/";
-            preg_match($pattern, strtolower($person['profile']['real_name_normalized']), $matches);
-            if (isset($matches[1]) && !empty($matches[1])) {
+            if (!$place->isSearchable()) {
+                continue;
+            }
+
+            if (!$found && $place->checkPerson($person->getProfileAttr('real_name_normalized'))) {
                 $found = true;
-
+                $lost = false;
                 //checking if person is lost in time
                 if (CHECK_DAY_OF_WEEK_IN_NAME) {
                     $pattern = "/(" . strtolower(substr(date('l'), 0, 3)) . ")/";
-                    preg_match($pattern, strtolower($person['profile']['real_name_normalized']), $matches);
+                    preg_match($pattern, strtolower($person->getProfileAttr('real_name_normalized')), $matches);
+                    if (!isset($matches[1]) || empty($matches[1])) {
+                        $placeLost->addPerson($person);
+                        $lost = true;
+                    }
                 }
 
-                if (CHECK_DAY_OF_WEEK_IN_NAME && (!isset($matches[1]) || empty($matches[1]))) {
-                    $lost_in_time[] = $person;
-                } else {
-                    $places[$placeKey]['people'][] = $person;
+                if (!$lost) {
+                    $place->addPerson($person);
                 }
-
-
-                break;
             }
-
         }
 
         if (!$found) {
-            $not_found[] = $person;
+            $placeNotFound->addPerson($person);
         }
-    }
-
-    //Inserting all people w/ unknown location
-    $places['unknown_location']['people'] = $not_found;
-
-    if(CHECK_DAY_OF_WEEK_IN_NAME){
-        //Inserting all lost in time
-        $places['lost_in_time']['people'] = $lost_in_time;
     }
 }
 
@@ -94,7 +75,7 @@ $twig = new Twig_Environment($loader);
 //Sorting Places according to its displayIndex key
 //We sort at the end, to avoid having people "Off" identified as in the "Off"ice
 usort($places, function ($a, $b) {
-    return $a['displayIndex'] - $b['displayIndex'];
+    return $a->getDisplayIndex() - $b->getDisplayIndex();
 });
 
 $data['places'] = $places;

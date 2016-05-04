@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 
-
 <head>
     <meta charset="UTF-8">
     <title>Team Info</title>
@@ -13,45 +12,45 @@
 
 <body>
 {% for place in places %}
-    {% if place.people is not empty %}
+    {% if place.getPeople() is not empty %}
         <h2>{{ place.name }}</h2>
         <div class="row place" data-equalizer>
-            {% for person in place.people %}
+            {% for person in place.getPeople() %}
                 <div class="small-12 medium-6 large-4 columns user {% if loop.last %} end{% endif %} ">
                     <div class="info" data-equalizer-watch>
                         <div class="media-object">
                             <div class="media-object-section">
                                 <div class="thumbnail">
-                                    <img src="{{ person.final_picture }}">
+                                    <img src="{{ person.getPicture(constant('PROFILE_IMAGE_SIZE')) }}">
                                 </div>
                             </div>
                             <div class="media-object-section">
-                                <h5 class="name">{{ person.profile.real_name_normalized }}</h5>
+                                <h5 class="name">{{ person.getProfileAttr('real_name_normalized') }}</h5>
                                 <ul>
                                     {#<li>#}
                                         {#<span class="icon icon-user" title="Username"></span>{{ person.name }}#}
                                     {#</li>#}
-                                    {% if person.profile.title is not empty %}
+                                    {% if person.getProfileAttr('title') is not empty %}
                                         <li>
-                                            <span class="icon icon-tag" title="Title"></span>{{ person.profile.title }}
+                                            <span class="icon icon-tag" title="Title"></span>{{ person.getProfileAttr('title') }}
                                         </li>
                                     {% endif %}
-                                    {% if person.profile.email is not empty %}
+                                    {% if person.getProfileAttr('email') is not empty %}
                                         <li>
                                             <span class="icon icon-envelope-o" title="E-mail"></span>
-                                            <a href="mailto:{{ person.profile.email }}">{{ person.profile.email }}</a>
+                                            <a href="mailto:{{ person.profile.email }}">{{ person.getProfileAttr('email') }}</a>
                                         </li>
                                     {% endif %}
-                                    {% if person.profile.phone is not empty %}
+                                    {% if person.getProfileAttr('phone') is not empty %}
                                         <li>
                                         <span class="icon icon-phone"
-                                              title="Phone Number"></span>{{ person.profile.phone }}
+                                              title="Phone Number"></span>{{ person.getProfileAttr('phone') }}
                                         </li>
                                     {% endif %}
-                                    {% if person.profile.skype is not empty %}
+                                    {% if person.getProfileAttr('skype') is not empty %}
                                         <li>
                                     <span class="icon icon-skype"
-                                          title="Skype username"></span>{{ person.profile.skype }}
+                                          title="Skype username"></span>{{ person.getProfileAttr('skype') }}
                                         </li>
                                     {% endif %}
                                 </ul>
