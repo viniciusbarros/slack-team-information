@@ -40,7 +40,14 @@ class SlackRetriever
         return $return;
     }
 
-    public function performRequest($url, $type = 'GET', $post_fields = array())
+    /**
+     * @param        $url
+     * @param string $type
+     * @param array  $post_fields
+     *
+     * @return mixed
+     */
+    private function performRequest($url, $type = 'GET', $post_fields = array())
     {
         $curl = curl_init();
 
@@ -49,7 +56,7 @@ class SlackRetriever
             CURLOPT_URL => $url,
         );
 
-        if ($type == 'POST') {
+        if (strtoupper($type) == 'POST') {
             $options[CURLOPT_POST] = 1;
             $options[CURLOPT_POSTFIELDS] = $post_fields;
         }
@@ -69,6 +76,21 @@ class SlackRetriever
         curl_close($curl);
 
         return $return;
+    }
+
+    /**
+     * @param string $apiMethod
+     *
+     * @return mixed
+     */
+    public function request($apiMethod, $parameters = array(), $requestType = 'POST')
+    {
+        $url = $this->slackRequestUrl . $apiMethod . '?token=' . $this->token . '&pretty=1';
+        if (!in_array(strtoupper($requestType), array('POST', 'GET'))) {
+            $request_type = 'POST';
+        }
+
+        return $this->performRequest($url, $requestType, $parameters);
     }
 
 }
