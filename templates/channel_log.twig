@@ -1,0 +1,25 @@
+{% include 'layout/header.twig' %}
+
+<h1 class="text-center">Log from channel #{{ channel_name }}</h1>
+{% for message in log %}
+    <div class="row">
+        <div class="small-12 medium-12 large-12 columns">
+            <div class="media-object">
+                <div class="media-object-section">
+                    <div class="thumbnail">
+                        <img src="{{ users[message.user]['profile']['image_48'] }}">
+                    </div>
+                </div>
+                <div class="media-object-section">
+                    <h4>{{ users[message.user]['profile']['real_name_normalized'] }}</h4>
+                    {% set timestamp = message.ts|split('.') %}
+                    <p>{{ timestamp[0] | date('d/m/Y H:i:s') }}</p>
+                    <p>{{ message.text }}</p>
+                </div>
+            </div>
+        </div>
+        <hr/>
+    </div>
+{% endfor %}
+
+{% include 'layout/footer.twig' %}

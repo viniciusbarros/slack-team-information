@@ -1,0 +1,13 @@
+{% include 'layout/header.twig' %}
+
+<h1 class="text-center">Channels</h1>
+<div class="row place" data-equalizer>
+    {% for channel in channels %}
+        <div class="small-6 medium-3 large-2 columns channel {% if loop.last %} end{% endif %}  ">
+            <a class="button expanded text-center" data-equalizer-watch
+               href="/{{ link }}?channel={{ channel.id }}&name={{ channel.name }}">#{{ channel.name }}</a>
+        </div>
+    {% endfor %}
+</div>
+
+{% include 'layout/footer.twig' %}
