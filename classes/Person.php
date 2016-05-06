@@ -1,5 +1,7 @@
 <?php
 
+namespace TeamInfo;
+
 /**
  * User: Vinicius
  * Date: 04/05/2016

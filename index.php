@@ -1,6 +1,8 @@
 <?php
 
 use TeamInfo\SlackRetriever;
+use TeamInfo\Person;
+use TeamInfo\Place;
 
 include_once 'classes/SlackRetriever.php';
 include_once 'classes/Place.php';
@@ -79,5 +81,6 @@ usort($places, function ($a, $b) {
 });
 
 $data['places'] = $places;
+$data['title'] = 'Users';
 $twig->display('users.twig', $data);
 

@@ -7,6 +7,6 @@ define('SLACK_TOKEN', 'xxxx-99999999999-99999999999-99999999999-99999999999');
 define('REQUEST_METHOD','POST'); //can be GET as well
 define('CHECK_DAY_OF_WEEK_IN_NAME', false);
 
-$places[] = new Place('Off', 4, array('oof', 'out of office', 'outofoffice', 'ooo'));
-$places[] = new Place('Office', 1, array('office', 'nch'));
-$places[] = new Place('Working From Home', 3, array('wfh', 'home'));
+$places[] = new TeamInfo\Place('Off', 4, array('oof', 'out of office', 'outofoffice', 'ooo'));
+$places[] = new TeamInfo\Place('Office', 1, array('office', 'nch'));
+$places[] = new TeamInfo\Place('Working From Home', 3, array('wfh', 'home'));
