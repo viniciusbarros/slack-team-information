@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8">
-    <title>Team Info</title>
-    <link rel="stylesheet" type="text/css" href="vendor/zurb/foundation/dist/foundation.min.css">
-
-    <link rel="stylesheet" type="text/css" href="css/fonts.css">
-    <link rel="stylesheet" type="text/css" href="css/users.css">
-</head>
-
-<body>
+{% include 'layout/header.twig' %}
 {% for place in places %}
     {% if place.getPeople() is not empty %}
         <h2>{{ place.name }}</h2>
@@ -28,11 +16,12 @@
                                 <h5 class="name">{{ person.getProfileAttr('real_name_normalized') }}</h5>
                                 <ul>
                                     {#<li>#}
-                                        {#<span class="icon icon-user" title="Username"></span>{{ person.name }}#}
+                                    {#<span class="icon icon-user" title="Username"></span>{{ person.name }}#}
                                     {#</li>#}
                                     {% if person.getProfileAttr('title') is not empty %}
                                         <li>
-                                            <span class="icon icon-tag" title="Title"></span>{{ person.getProfileAttr('title') }}
+                                            <span class="icon icon-tag"
+                                                  title="Title"></span>{{ person.getProfileAttr('title') }}
                                         </li>
                                     {% endif %}
                                     {% if person.getProfileAttr('email') is not empty %}
@@ -62,13 +51,4 @@
         </div>
     {% endif %}
 {% endfor %}
-
-<script src="js/jquery-1.12.3.min.js"></script>
-<script src="vendor/zurb/foundation/dist/foundation.min.js"></script>
-<script src="vendor/zurb/foundation/js/foundation.equalizer.js"></script>
-
-<script>
-    $(document).foundation();
-</script>
-</body>
-</html>
+{% include 'layout/footer.twig' %}
